@@ -1,0 +1,48 @@
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const resultDiv = document.getElementById('login-result');
+
+    if (!email || !password) {
+        resultDiv.textContent = "กรุณากรอกอีเมลและรหัสผ่าน!";
+        resultDiv.className = "error"; 
+        return;
+    }
+
+    try {
+        // ส่งคำขอไปยัง API ด้วย Fetch
+        const response = await fetch('http://localhost:3000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // เข้าสู่ระบบสำเร็จ
+            resultDiv.textContent = data.message;
+            resultDiv.className = "success";
+
+            setTimeout(() => {
+                window.location.href = "home.html";
+            }, 2000);
+        } else {
+            // ข้อผิดพลาด (เช่น ชื่อผู้ใช้งานไม่ถูกต้อง)
+            resultDiv.textContent = data.message;
+            resultDiv.className = "error";
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        resultDiv.textContent = "เกิดข้อผิดพลาดในระบบ!";
+        resultDiv.className = "error";
+    }
+});
+
+    });
+</script>
